@@ -20,6 +20,12 @@ Simply put content and image pairs in `images/content` and `images/style` respec
 python WCT.py --cuda
 ```
 
+## Style Transfer with Mask
+
+```
+python WCT_mask.py --cuda --contentPath /path/to/content/img --stylePath /path/to/style/img --content_mask_Path /path/to/content/mask --style_mask_Path /path/to/style/mask
+```
+
 ## Results
 <img src="images/content/in1.jpg" width="200" hspace="5"><img src="images/style/in1.jpg" width="200" hspace="5"><img src="images/content/in3.jpg" width="200" hspace="5"><img src="images/style/in3.jpg" width="200" hspace="5">
 
