@@ -23,7 +23,7 @@ python WCT.py --cuda
 ## Style Transfer with Mask
 
 ```
-python WCT_mask.py --cuda --contentPath /images/wct/content/img --stylePath /images/wct/style/img --content_mask_Path /images/wct/content/mask --style_mask_Path /images/wct/style/mask
+python WCT_mask.py --cuda --contentPath /images/wct_mask/content/img --stylePath /images/wct_mask/style/img --content_mask_Path /images/wct_mask/content/masks --style_mask_Path /images/wct_mask/style/masks
 ```
 
 ## Results
