@@ -80,11 +80,11 @@ class WCT(nn.Module):
 
     def wct2(self,cF,sF):
         cFSize = cF.size()
-        c_mean = torch.mean(cF,1) # c x (h x w)
+        c_mean = torch.mean(cF,1).float() # c x (h x w)
         c_mean = c_mean.unsqueeze(1).expand_as(cF)
         cF = cF - c_mean
 
-        iden = torch.eye(cFSize[0]).cuda().double()
+        iden = torch.eye(cFSize[0]).cuda().float()   #.double()
         contentConv = torch.mm(cF,cF.t()).div(cFSize[1]-1) + iden
         c_u,c_e,c_v = torch.svd(contentConv,some=False)
 
@@ -168,9 +168,12 @@ class WCT(nn.Module):
                         print('cmaskResized has no 1, ignore')
                         continue
                     cmaskView = cmaskResized.view(-1)
-                    fgcmask = (cmaskView == 1).nonzero().squeeze(1)
+                    #pdb.set_trace()
+                    #fgcmask = (cmaskView == 1).nonzero().squeeze(1)
+                    fgcmask = (cmaskView > 0 ).nonzero().squeeze(1)
+
                     fgcmask = fgcmask.cuda()
-                    cFView = cF.view(C,-1)
+                    cFView = cF.view(C,-1).cuda()
                     cFFG = torch.index_select(cFView,1,fgcmask.long())
 
                     smaskResized = self.scale_dialate(smask,W1,H1)
@@ -178,13 +181,14 @@ class WCT(nn.Module):
                         print('smaskResized has no 1, ignore')
                         continue
                     smaskView = smaskResized.view(-1)
-                    fgsmask = (smaskView == 1).nonzero().squeeze(1)
+                    #fgsmask = (smaskView == 1).nonzero().squeeze(1)
+                    fgsmask = (smaskView > 1).nonzero().squeeze(1)
                     fgsmask = fgsmask.cuda()
-                    sFView = sF.view(C,-1)
+                    sFView = sF.view(C,-1).cuda()
                     sFFG = torch.index_select(sFView,1,fgsmask.long())
 
-                    targetFeatureFG = self.wct2(cFFG,sFFG)
-                    targetFeature.index_copy_(1,fgcmask,targetFeatureFG)
+                    targetFeatureFG = self.wct2(cFFG.float(),sFFG.float())
+                    targetFeature.index_copy_(1,fgcmask.cpu(),targetFeatureFG.cpu())
                     del fgcmask
                     del fgsmask
             targetFeature = targetFeature.view_as(cF)
