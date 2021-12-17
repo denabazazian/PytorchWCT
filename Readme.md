@@ -28,7 +28,7 @@ python WCT_mask.py --cuda --contentPath /images/wct_mask/content/img --stylePath
 
 |content| content mask | style | style mask | result|
 | -- |  -- | -- | -- | -- |
-| <img src="images/wct_mask/content/imgs/im.png" width="150" hspace="3">|<img src="images/wct_mask/content/masks/im.png" width="150" hspace="3">|<img src="images/wct_mask/style/imgs/im.png" width="150" hspace="3">|<img src="images/wct_mask/style/masks/im.png" width="150" hspace="3">|<img src="images/wct_mask/content/im.png" width="150" hspace="3">|
+| <img src="images/wct_mask/content/imgs/im.png" width="150" hspace="3">|<img src="images/wct_mask/content/masks/im.png" width="150" hspace="3">|<img src="images/wct_mask/style/imgs/im.png" width="150" hspace="3">|<img src="images/wct_mask/style/masks/im.png" width="150" hspace="3">|<img src="samples/im_1.png" width="150" hspace="3">|
 
 
 ## Results
