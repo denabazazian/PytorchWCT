@@ -10,6 +10,7 @@ from util_mask import *
 import scipy.misc
 from torch.utils.serialization import load_lua
 import time
+import pdb
 
 parser = argparse.ArgumentParser(description='WCT Pytorch')
 parser.add_argument('--contentPath',default='images/content',help='path to train')
@@ -55,14 +56,15 @@ def styleTransfer(contentImg,styleImg,contentMaskImg,styleMaskImg,imname,csF):
     cmF5 = wct.e5(contentMaskImg)
     smF5 = wct.e5(styleMaskImg)
 
-
+    #pdb.set_trace()
     sF5 = sF5.data.cpu().squeeze(0)
     cF5 = cF5.data.cpu().squeeze(0)
     cmF5 = cmF5.data.cpu().squeeze(0)
     smF5 = smF5.data.cpu().squeeze(0)
 
     csF5 = wct.transform_mask(cF5,sF5,cmF5,smF5,args.alpha)   #(cF5,sF5,csF,args.alpha)
-    Im5 = wct.d5(csF5)
+    #pdb.set_trace()
+    Im5 = wct.d5(csF5.cuda())
 
     sF4 = wct.e4(styleImg)
     cF4 = wct.e4(Im5)
@@ -75,7 +77,7 @@ def styleTransfer(contentImg,styleImg,contentMaskImg,styleMaskImg,imname,csF):
     smF4 = smF4.data.cpu().squeeze(0)
 
     csF4 = wct.transform_mask(cF4,sF4,cmF4,smF4,args.alpha)   #(cF4,sF4,csF,args.alpha)
-    Im4 = wct.d4(csF4)
+    Im4 = wct.d4(csF4.cuda())
 
     sF3 = wct.e3(styleImg)
     cF3 = wct.e3(Im4)
@@ -88,7 +90,7 @@ def styleTransfer(contentImg,styleImg,contentMaskImg,styleMaskImg,imname,csF):
     smF3 = smF3.data.cpu().squeeze(0)
 
     csF3 = wct.transform_mask(cF3,sF3,cmF3,smF3,args.alpha)     #(cF3,sF3,csF,args.alpha)
-    Im3 = wct.d3(csF3)
+    Im3 = wct.d3(csF3.cuda())
 
     sF2 = wct.e2(styleImg)
     cF2 = wct.e2(Im3)
@@ -101,7 +103,7 @@ def styleTransfer(contentImg,styleImg,contentMaskImg,styleMaskImg,imname,csF):
     smF2 = smF2.data.cpu().squeeze(0)
 
     csF2 = wct.transform_mask(cF2,sF2,cmF2,smF2,args.alpha)   #(cF2,sF2,csF,args.alpha)
-    Im2 = wct.d2(csF2)
+    Im2 = wct.d2(csF2.cuda())
 
     sF1 = wct.e1(styleImg)
     cF1 = wct.e1(Im2)
@@ -114,7 +116,7 @@ def styleTransfer(contentImg,styleImg,contentMaskImg,styleMaskImg,imname,csF):
     smF1 = smF1.data.cpu().squeeze(0)
 
     csF1 = wct.transform_mask(cF1,sF1,cmF1,smF1,args.alpha)   #(cF1,sF1,csF,args.alpha)
-    Im1 = wct.d1(csF1)
+    Im1 = wct.d1(csF1.cuda())
     # save_image has this wired design to pad images with 4 pixels at default.
     vutils.save_image(Im1.data.cpu().float(),os.path.join(args.outf,imname))
     return
