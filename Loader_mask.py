@@ -18,6 +18,9 @@ def is_image_file(filename):
 def default_loader(path):
     return Image.open(path).convert('RGB')
 
+def mask_loader(path):
+    return Image.open(path).convert('1')
+
 class Dataset(data.Dataset):
     def __init__(self,contentPath,stylePath,content_mask_path, style_mask_path, fineSize):
         super(Dataset,self).__init__()
@@ -43,8 +46,8 @@ class Dataset(data.Dataset):
 
         contentImg = default_loader(contentImgPath)
         styleImg = default_loader(styleImgPath)
-        contentMaskImg = default_loader(contentMaskImgPath)
-        styleMaskImg = default_loader(styleMaskImgPath)
+        contentMaskImg = mask_loader(contentMaskImgPath)
+        styleMaskImg = mask_loader(styleMaskImgPath)
         # resize
         if(self.fineSize != 0):
             w,h = contentImg.size
