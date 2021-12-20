@@ -26,12 +26,13 @@ python WCT.py --cuda
 python WCT_mask.py --cuda --contentPath /images/wct_mask/content/img --stylePath /images/wct_mask/style/img --content_mask_Path /images/wct_mask/content/masks --style_mask_Path /images/wct_mask/style/masks
 ```
 
+## Results
 |content| content mask | style | style mask | result|
 | -- |  -- | -- | -- | -- |
 | <img src="images/wct_mask/content/imgs/im.png" width="150" hspace="3">|<img src="images/wct_mask/content/masks/im.png" width="150" hspace="3">|<img src="images/wct_mask/style/imgs/im.png" width="150" hspace="3">|<img src="images/wct_mask/style/masks/im.png" width="150" hspace="3">|<img src="samples/im_1.png" width="150" hspace="3">|
 
 
-## Results
+
 <!--
 <img src="images/content/in1.jpg" width="200" hspace="5"><img src="images/style/in1.jpg" width="200" hspace="5"><img src="images/content/in3.jpg" width="200" hspace="5"><img src="images/style/in3.jpg" width="200" hspace="5">
 
@@ -43,6 +44,8 @@ python WCT_mask.py --cuda --contentPath /images/wct_mask/content/img --stylePath
 --> 
 
 ### Acknowledgments
+Thanks Xueting Li for providing her code and her great help. 
+
 Many thanks to the author Yijun Li for his kind help.
 
 ### Reference
