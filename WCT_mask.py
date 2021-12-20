@@ -6,7 +6,8 @@ from torch.autograd import Variable
 import torchvision.utils as vutils
 import torchvision.datasets as datasets
 from Loader_mask import Dataset
-from util_mask import *
+#from util_mask import *
+from util_mask_FB import *
 import scipy.misc
 from torch.utils.serialization import load_lua
 import time
@@ -50,16 +51,18 @@ loader = torch.utils.data.DataLoader(dataset=dataset,
 
 wct = WCT(args)
 def styleTransfer(contentImg,styleImg,contentMaskImg,styleMaskImg,imname,csF):
+    
 
+    #pdb.set_trace()
     sF5 = wct.e5(styleImg)
     cF5 = wct.e5(contentImg)
-    cmF5 = wct.e5(contentMaskImg)
-    smF5 = wct.e5(styleMaskImg)
+    cmF5 = torch.nn.Upsample(scale_factor=(32/args.fineSize), mode='bilinear')(contentMaskImg.unsqueeze(0)).expand(1,512,32,32) #wct.e5(contentMaskImg)
+    smF5 = torch.nn.Upsample(scale_factor=(32/args.fineSize), mode='bilinear')(styleMaskImg.unsqueeze(0)).expand(1,512,32,32)   #wct.e5(styleMaskImg)
 
     #pdb.set_trace()
     sF5 = sF5.data.cpu().squeeze(0)
     cF5 = cF5.data.cpu().squeeze(0)
-    cmF5 = cmF5.data.cpu().squeeze(0)
+    cmF5 = cmF5.data.cpu().squeeze(0) #[512, 32, 32]
     smF5 = smF5.data.cpu().squeeze(0)
 
     csF5 = wct.transform_mask(cF5,sF5,cmF5,smF5,args.alpha)   #(cF5,sF5,csF,args.alpha)
@@ -68,12 +71,12 @@ def styleTransfer(contentImg,styleImg,contentMaskImg,styleMaskImg,imname,csF):
 
     sF4 = wct.e4(styleImg)
     cF4 = wct.e4(Im5)
-    cmF4 = wct.e4(contentMaskImg)
-    smF4 = wct.e4(styleMaskImg)
+    cmF4 = torch.nn.Upsample(scale_factor=(64/args.fineSize), mode='bilinear')(contentMaskImg.unsqueeze(0)).expand(1,512,64,64) #wct.e4(contentMaskImg)   
+    smF4 = torch.nn.Upsample(scale_factor=(64/args.fineSize), mode='bilinear')(styleMaskImg.unsqueeze(0)).expand(1,512,64,64)     #wct.e4(styleMaskImg)
 
     sF4 = sF4.data.cpu().squeeze(0)
     cF4 = cF4.data.cpu().squeeze(0)
-    cmF4 = cmF4.data.cpu().squeeze(0)
+    cmF4 = cmF4.data.cpu().squeeze(0)   #[512, 64, 64]
     smF4 = smF4.data.cpu().squeeze(0)
 
     csF4 = wct.transform_mask(cF4,sF4,cmF4,smF4,args.alpha)   #(cF4,sF4,csF,args.alpha)
@@ -81,12 +84,12 @@ def styleTransfer(contentImg,styleImg,contentMaskImg,styleMaskImg,imname,csF):
 
     sF3 = wct.e3(styleImg)
     cF3 = wct.e3(Im4)
-    cmF3 = wct.e3(contentMaskImg)
-    smF3 = wct.e3(styleMaskImg)
+    cmF3 = torch.nn.Upsample(scale_factor=(128/args.fineSize), mode='bilinear')(contentMaskImg.unsqueeze(0)).expand(1,256,128,128)    #wct.e3(contentMaskImg)  
+    smF3 = torch.nn.Upsample(scale_factor=(128/args.fineSize), mode='bilinear')(styleMaskImg.unsqueeze(0)).expand(1,256,128,128)    #wct.e3(styleMaskImg)
 
     sF3 = sF3.data.cpu().squeeze(0)
     cF3 = cF3.data.cpu().squeeze(0)
-    cmF3 = cmF3.data.cpu().squeeze(0)
+    cmF3 = cmF3.data.cpu().squeeze(0)    #[256, 128, 128]
     smF3 = smF3.data.cpu().squeeze(0)
 
     csF3 = wct.transform_mask(cF3,sF3,cmF3,smF3,args.alpha)     #(cF3,sF3,csF,args.alpha)
@@ -94,12 +97,12 @@ def styleTransfer(contentImg,styleImg,contentMaskImg,styleMaskImg,imname,csF):
 
     sF2 = wct.e2(styleImg)
     cF2 = wct.e2(Im3)
-    cmF2 = wct.e2(contentMaskImg)
-    smF2 = wct.e2(styleMaskImg)
+    cmF2 = torch.nn.Upsample(scale_factor=(256/args.fineSize), mode='bilinear')(contentMaskImg.unsqueeze(0)).expand(1,128,256,256) #wct.e2(contentMaskImg)   
+    smF2 = torch.nn.Upsample(scale_factor=(256/args.fineSize), mode='bilinear')(styleMaskImg.unsqueeze(0)).expand(1,128,256,256) #wct.e2(styleMaskImg)
 
     sF2 = sF2.data.cpu().squeeze(0)
     cF2 = cF2.data.cpu().squeeze(0)
-    cmF2 = cmF2.data.cpu().squeeze(0)
+    cmF2 = cmF2.data.cpu().squeeze(0)  #[128, 256, 256]
     smF2 = smF2.data.cpu().squeeze(0)
 
     csF2 = wct.transform_mask(cF2,sF2,cmF2,smF2,args.alpha)   #(cF2,sF2,csF,args.alpha)
@@ -107,17 +110,18 @@ def styleTransfer(contentImg,styleImg,contentMaskImg,styleMaskImg,imname,csF):
 
     sF1 = wct.e1(styleImg)
     cF1 = wct.e1(Im2)
-    cmF1 = wct.e1(contentMaskImg)
-    smF1 = wct.e1(styleMaskImg)
+    cmF1 = torch.nn.Upsample(scale_factor=(512/args.fineSize), mode='bilinear')(contentMaskImg.unsqueeze(0)).expand(1,64,512,512)   #wct.e1(contentMaskImg)   
+    smF1 = torch.nn.Upsample(scale_factor=(512/args.fineSize), mode='bilinear')(styleMaskImg.unsqueeze(0)).expand(1,64,512,512)   #wct.e1(styleMaskImg)
 
     sF1 = sF1.data.cpu().squeeze(0)
     cF1 = cF1.data.cpu().squeeze(0)
-    cmF1 = cmF1.data.cpu().squeeze(0)
+    cmF1 = cmF1.data.cpu().squeeze(0)   #[64, 512, 512]
     smF1 = smF1.data.cpu().squeeze(0)
 
     csF1 = wct.transform_mask(cF1,sF1,cmF1,smF1,args.alpha)   #(cF1,sF1,csF,args.alpha)
     Im1 = wct.d1(csF1.cuda())
     # save_image has this wired design to pad images with 4 pixels at default.
+    #pdb.set_trace()
     vutils.save_image(Im1.data.cpu().float(),os.path.join(args.outf,imname))
     return
 
