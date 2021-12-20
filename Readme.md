@@ -44,7 +44,7 @@ python WCT_mask.py --cuda --contentPath /images/wct_mask/content/img --stylePath
 --> 
 
 ### Acknowledgments
-Thanks Xueting Li for providing her code and her great help. 
+Thanks to Xueting Li for providing her code and her great help. 
 
 Many thanks to the author Yijun Li for his kind help.
 
